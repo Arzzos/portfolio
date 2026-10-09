@@ -10,7 +10,11 @@ compatibility_date = "2026-10-01"
 
 [assets]
 directory = "./dist"
+binding = "ASSETS"
 not_found_handling = "single-page-application"
+# Required: without it, asset-matching requests bypass the Worker entirely and
+# security headers set in worker.js would never apply (default is asset-first).
+run_worker_first = true
 
 [vars]
 SITE_URL = "https://arzzos.com"

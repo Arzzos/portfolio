@@ -107,45 +107,85 @@ async function sendViaResend(name, email, message, env) {
   return 'sent';
 }
 
+/**
+ * Security headers live HERE, not in `_headers`: with a Worker script
+ * intercepting every request, `_headers` rules never apply (see
+ * https://developers.cloudflare.com/workers/static-assets/headers/).
+ */
+const SECURITY_HEADERS = {
+  'x-frame-options': 'DENY',
+  'x-content-type-options': 'nosniff',
+  'referrer-policy': 'strict-origin-when-cross-origin',
+  'permissions-policy': 'camera=(), microphone=(), geolocation=()',
+  'strict-transport-security': 'max-age=63072000; includeSubDomains; preload',
+};
+
+function withSecurityHeaders(response) {
+  const headers = new Headers(response.headers);
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    if (!headers.has(name)) headers.set(name, value);
+  }
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
+function apiJson(data, status = 200) {
+  return withSecurityHeaders(
+    new Response(JSON.stringify(data), {
+      status,
+      headers: { 'content-type': 'application/json' },
+    }),
+  );
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
     if (url.pathname === '/api/contact') {
       if (request.method !== 'POST') {
-        return Response.json({ ok: false, error: 'method-not-allowed' }, { status: 405 });
+        return apiJson({ ok: false, error: 'method-not-allowed' }, 405);
       }
       let body;
       try {
         body = await request.json();
       } catch {
-        return Response.json({ ok: false, error: 'invalid-json' }, { status: 400 });
+        return apiJson({ ok: false, error: 'invalid-json' }, 400);
       }
       const name = typeof body?.name === 'string' ? body.name.trim().slice(0, 100) : '';
       const email = typeof body?.email === 'string' ? body.email.trim().slice(0, 254) : '';
       const message = typeof body?.message === 'string' ? body.message.trim().slice(0, 5000) : '';
       if (!name || !EMAIL_RE.test(email) || !message) {
-        return Response.json({ ok: false, error: 'invalid-fields' }, { status: 400 });
+        return apiJson({ ok: false, error: 'invalid-fields' }, 400);
       }
       const ip = request.headers.get('cf-connecting-ip') ?? '';
       if (rateLimited(ip || 'unknown')) {
-        return Response.json({ ok: false, error: 'rate-limited' }, { status: 429 });
+        return apiJson({ ok: false, error: 'rate-limited' }, 429);
       }
       const token = typeof body?.turnstileToken === 'string' ? body.turnstileToken : '';
       if (!(await verifyTurnstile(token, ip, env))) {
-        return Response.json({ ok: false, error: 'forbidden' }, { status: 403 });
+        return apiJson({ ok: false, error: 'forbidden' }, 403);
       }
       // Gate passed. Deliver via Resend.
       const delivery = await sendViaResend(name, email, message, env);
       if (delivery === 'sent') {
-        return Response.json({ ok: true });
+        return apiJson({ ok: true });
       }
       if (delivery === 'unconfigured') {
-        return Response.json({ ok: false, error: 'contact-unavailable' }, { status: 503 });
+        return apiJson({ ok: false, error: 'contact-unavailable' }, 503);
       }
-      return Response.json({ ok: false, error: 'delivery-failed' }, { status: 502 });
+      return apiJson({ ok: false, error: 'delivery-failed' }, 502);
     }
 
-    return env.ASSETS.fetch(request);
+    const asset = await env.ASSETS.fetch(request);
+    if (url.pathname.startsWith('/_astro/')) {
+      const headers = new Headers(asset.headers);
+      headers.set('cache-control', 'public, max-age=31536000, immutable');
+      return withSecurityHeaders(new Response(asset.body, { status: asset.status, headers }));
+    }
+    return withSecurityHeaders(asset);
   },
 };
