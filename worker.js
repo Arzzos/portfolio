@@ -66,6 +66,47 @@ async function verifyTurnstile(token, remoteIp, env) {
   );
 }
 
+/**
+ * Sends the contact message via Resend.
+ * Returns 'sent' | 'failed' | 'unconfigured'. Failures are logged
+ * server-side without secrets; the caller maps to client status.
+ */
+async function sendViaResend(name, email, message, env) {
+  const to = String(env.CONTACT_TO ?? '').trim();
+  const from = String(env.CONTACT_FROM ?? '').trim();
+  if (typeof env.RESEND_API_KEY !== 'string' || env.RESEND_API_KEY.length === 0 || !to || !from) {
+    console.error('[contact] missing RESEND_API_KEY/CONTACT_TO/CONTACT_FROM');
+    return 'unconfigured';
+  }
+  const cleanName = name.replace(/[\r\n]+/g, ' ').slice(0, 100);
+  let res;
+  try {
+    res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${env.RESEND_API_KEY}`,
+        'content-type': 'application/json',
+      },
+      signal: AbortSignal.timeout(10_000),
+      body: JSON.stringify({
+        from: `Portfolio <${from}>`,
+        to: [to],
+        reply_to: email,
+        subject: `Portfolio: mensaje de ${cleanName}`,
+        text: `Nombre: ${cleanName}\nEmail: ${email}\n\n${message}`,
+      }),
+    });
+  } catch {
+    console.error('[contact] resend network error');
+    return 'failed';
+  }
+  if (!res.ok) {
+    console.error(`[contact] resend rejected: ${res.status}`);
+    return 'failed';
+  }
+  return 'sent';
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -94,8 +135,15 @@ export default {
       if (!(await verifyTurnstile(token, ip, env))) {
         return Response.json({ ok: false, error: 'forbidden' }, { status: 403 });
       }
-      // Gate passed. Delivery (Resend) is still a stub — replaced in the next step.
-      return Response.json({ ok: false, error: 'contact-unavailable' }, { status: 503 });
+      // Gate passed. Deliver via Resend.
+      const delivery = await sendViaResend(name, email, message, env);
+      if (delivery === 'sent') {
+        return Response.json({ ok: true });
+      }
+      if (delivery === 'unconfigured') {
+        return Response.json({ ok: false, error: 'contact-unavailable' }, { status: 503 });
+      }
+      return Response.json({ ok: false, error: 'delivery-failed' }, { status: 502 });
     }
 
     return env.ASSETS.fetch(request);
