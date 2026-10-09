@@ -108,6 +108,12 @@ const c = t.contact;
 
   const currentTheme = () => (document.documentElement.classList.contains('light') ? 'light' : 'dark');
 
+  let widgetRendered = false;
+
+  // Turnstile api.js (~28KB) is injected only when the contact section
+  // approaches: it never blocks initial load.
+  let apiLoading = null;
+
   function renderWidget() {
     if (!window.turnstile) return;
     const container = document.getElementById('cf-turnstile');
@@ -129,18 +135,34 @@ const c = t.contact;
     });
   }
 
-  window.cfTsOnload = scheduleWidgetRender;
+  // Kick off lazy load immediately: the script parses while the user reads.
+  scheduleWidgetRender();
   window.addEventListener('arzzos-theme', () => {
     if (widgetRendered) renderWidget();
   });
 
-  let widgetRendered = false;
+  function loadTurnstileApi() {
+    if (window.turnstile) return Promise.resolve();
+    if (!apiLoading) {
+      apiLoading = new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+        s.async = true;
+        s.defer = true;
+        s.onload = () => resolve();
+        s.onerror = () => reject(new Error('turnstile api failed'));
+        document.head.appendChild(s);
+      });
+    }
+    return apiLoading;
+  }
 
   function scheduleWidgetRender() {
     if (widgetRendered) return;
     const section = document.getElementById('contacto');
+    const render = () => loadTurnstileApi().then(renderWidget, () => {});
     if (!section || !('IntersectionObserver' in window)) {
-      renderWidget();
+      render();
       return;
     }
     // The widget pulls ~250KB of challenge code: only render when the
@@ -149,7 +171,7 @@ const c = t.contact;
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
           io.disconnect();
-          renderWidget();
+          render();
         }
       },
       { rootMargin: '600px' },
@@ -157,7 +179,7 @@ const c = t.contact;
     io.observe(section);
     setTimeout(() => {
       io.disconnect();
-      renderWidget();
+      render();
     }, 12000);
   }
 
