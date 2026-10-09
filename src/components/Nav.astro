@@ -14,7 +14,7 @@ const prefix = `/${lang}`;
 <header class="site-header sticky top-0 z-40 backdrop-blur">
   <nav aria-label="Principal" class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
     <a href={prefix + '/'} class="flex items-center gap-2 font-bold">
-      <img src="/arzzos-logo.png" alt="Arzzos" width="28" height="28" class="rounded" />
+      <img src="/arzzos-logo.webp" alt="Arzzos" width="28" height="28" fetchpriority="high" class="rounded" />
       <span class="mono text-sm">arzzos.com</span>
     </a>
     <div class="flex items-center gap-4 text-sm">
@@ -34,7 +34,7 @@ const prefix = `/${lang}`;
       >
         {lang === 'es' ? 'EN' : 'ES'}
       </a>
-      <ThemeToggle lang={lang} client:load />
+      <ThemeToggle lang={lang} client:idle />
     </div>
   </nav>
 </header>

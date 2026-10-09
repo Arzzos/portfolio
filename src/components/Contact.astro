@@ -121,6 +121,7 @@ const c = t.contact;
       widgetId = null;
     }
     container.innerHTML = '';
+    widgetRendered = true;
     widgetId = window.turnstile.render(container, {
       sitekey: SITEKEY,
       action: ACTION,
@@ -128,9 +129,37 @@ const c = t.contact;
     });
   }
 
-  window.cfTsOnload = renderWidget;
-  window.addEventListener('arzzos-theme', renderWidget);
-  if (window.turnstile) renderWidget();
+  window.cfTsOnload = scheduleWidgetRender;
+  window.addEventListener('arzzos-theme', () => {
+    if (widgetRendered) renderWidget();
+  });
+
+  let widgetRendered = false;
+
+  function scheduleWidgetRender() {
+    if (widgetRendered) return;
+    const section = document.getElementById('contacto');
+    if (!section || !('IntersectionObserver' in window)) {
+      renderWidget();
+      return;
+    }
+    // The widget pulls ~250KB of challenge code: only render when the
+    // contact section approaches the viewport (plus a fallback delay).
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          renderWidget();
+        }
+      },
+      { rootMargin: '600px' },
+    );
+    io.observe(section);
+    setTimeout(() => {
+      io.disconnect();
+      renderWidget();
+    }, 12000);
+  }
 
   const form = document.getElementById('contact-form');
   const status = document.getElementById('cf-status');
