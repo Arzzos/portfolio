@@ -1,6 +1,4 @@
-/*
-  Reference: https://developers.cloudflare.com/workers/static-assets/headers/
-*/
+# https://developers.cloudflare.com/workers/static-assets/headers/
 /
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
