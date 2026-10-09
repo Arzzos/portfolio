@@ -23,6 +23,7 @@
       "name": "Káiros Industrial Platform",
       "oneline": "Manufacturing system unifying offline-first WMS, maintenance orders, quality, and real-time IIoT telemetry.",
       "role": "Full end-to-end full-stack architecture, design, and development.",
+      "alt": "Káiros platform module selector: Silo Management, Quality Control, WMS and Production",
       "stack": [
         "Python",
         "FastAPI",
@@ -42,6 +43,7 @@
       "name": "Silo IIoT Telemetry",
       "oneline": "Radar via PLC + WebSockets for real-time fine-solids measurement, removing manual at-height checks.",
       "role": "PM, architect, and full-stack implementer.",
+      "alt": "Silo telemetry cards with real-time fill levels",
       "stack": ["Python", "WebSockets", "C++", "React", "TimescaleDB", "IoT"],
       "impact": ["Real-time measurement", "−90% measurement errors", "Zero at-height risk checks"]
     },
@@ -50,6 +52,7 @@
       "name": "Quality & Shift Reports",
       "oneline": "Quality module with automatic per-shift and weekly reports (CPK, Yield, Sigma) by email, WMS-integrated.",
       "role": "Full-Stack Developer.",
+      "alt": "Quality statistical analysis dashboard with CPK, Sigma and alerts",
       "stack": ["Python", "React", "PostgreSQL"],
       "impact": ["−10 h/week on reports", "Automatic per-shift indicators"]
     }
