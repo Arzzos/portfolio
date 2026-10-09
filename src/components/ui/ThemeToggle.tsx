@@ -17,6 +17,7 @@ export default function ThemeToggle({ lang }: { lang: 'es' | 'en' }) {
     } catch {
       /* storage unavailable */
     }
+    window.dispatchEvent(new CustomEvent('arzzos-theme', { detail: { theme: next ? 'light' : 'dark' } }));
   };
 
   return (

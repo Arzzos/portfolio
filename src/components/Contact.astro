@@ -66,6 +66,7 @@ const c = t.contact;
         ></textarea>
       </div>
       <p id="cf-status" role="status" aria-live="polite" class="mono hidden text-sm"></p>
+      <div id="cf-turnstile" class="min-h-[65px]"></div>
       <button
         type="submit"
         class="btn-primary inline-flex w-full items-center justify-center rounded px-6 font-semibold hover:brightness-110"
@@ -99,23 +100,75 @@ const c = t.contact;
 </section>
 
 <script is:inline data-cf-lang={lang}>
+  // Turnstile explicit render (single-use tokens: reset after every attempt).
+  const SITEKEY = '0x4AAAAAAFSdRj1UQdP8paSq';
+  const ACTION = 'contact';
+  let widgetId = null;
+  let sending = false;
+
+  const currentTheme = () => (document.documentElement.classList.contains('light') ? 'light' : 'dark');
+
+  function renderWidget() {
+    if (!window.turnstile) return;
+    const container = document.getElementById('cf-turnstile');
+    if (!container) return;
+    if (widgetId !== null) {
+      try {
+        window.turnstile.remove(widgetId);
+      } catch {
+        /* already gone */
+      }
+      widgetId = null;
+    }
+    container.innerHTML = '';
+    widgetId = window.turnstile.render(container, {
+      sitekey: SITEKEY,
+      action: ACTION,
+      theme: currentTheme(),
+    });
+  }
+
+  window.cfTsOnload = renderWidget;
+  window.addEventListener('arzzos-theme', renderWidget);
+  if (window.turnstile) renderWidget();
+
   const form = document.getElementById('contact-form');
   const status = document.getElementById('cf-status');
+  const submitBtn = form?.querySelector('button[type="submit"]');
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(form).entries());
+    if (sending) return;
+    const fd = new FormData(form);
+    const token = fd.get('cf-turnstile-response');
+    sending = true;
+    if (submitBtn) submitBtn.disabled = true;
     status.classList.remove('hidden');
     status.textContent = '…';
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          name: fd.get('name'),
+          email: fd.get('email'),
+          message: fd.get('message'),
+          turnstileToken: typeof token === 'string' ? token : '',
+        }),
       });
       status.textContent = res.ok ? (form.dataset.success ?? 'OK') : (form.dataset.error ?? 'Error');
       if (res.ok) form.reset();
     } catch {
       status.textContent = form.dataset.error ?? 'Error';
+    } finally {
+      sending = false;
+      if (submitBtn) submitBtn.disabled = false;
+      if (widgetId !== null) {
+        try {
+          window.turnstile.reset(widgetId);
+        } catch {
+          /* widget gone */
+        }
+      }
     }
   });
 </script>
