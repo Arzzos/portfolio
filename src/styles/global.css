@@ -67,35 +67,108 @@ html.light {
 .btn-primary {
   background-color: var(--accent);
   color: #fff;
+  transition:
+    filter 0.25s ease,
+    scale 0.15s ease;
+}
+.btn-primary:active {
+  scale: 0.98;
 }
 .hero-badge {
   border: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
 }
 
-/* Emergence / ice cracks: ambient fixed layer, latent glow, slow pulse */
+/* Fluid theme switch (no flash) */
+body,
+.surface,
+.site-header,
+.badge-conf {
+  transition:
+    background-color 0.4s ease,
+    border-color 0.4s ease,
+    color 0.4s ease;
+}
+
+/* Cards: lift + accent glow on hover */
+.card-hover {
+  transition:
+    translate 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 12px 34px -14px var(--crack-glow);
+}
+
+/* Nav links: sliding underline */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: -4px;
+  height: 2px;
+  background: currentColor;
+  scale: 0 1;
+  transition: scale 0.25s ease;
+}
+.nav-link:hover::after {
+  scale: 1 1;
+}
+
+/* Emergence / ice cracks v2: base layer (::before) + echo+embers layer (::after),
+   offset pulses so the cracks feel latent-alive. Center stays calm for readability. */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' viewBox='0 0 1440 900'%3E%3Cg fill='none' stroke='%23C8102E' stroke-width='1.6' opacity='0.5'%3E%3Cpath d='M-40 200 L120 240 L200 210 L320 300 L430 270 L560 360 L640 340 L760 420'/%3E%3Cpath d='M320 300 L360 420 L340 520 L380 610'/%3E%3Cpath d='M560 360 L700 400 L820 380 L950 460 L1020 440'/%3E%3Cpath d='M1480 600 L1300 560 L1220 610 L1080 540 L980 580'/%3E%3Cpath d='M700 -20 L740 90 L710 180 L780 260 L760 340'/%3E%3Cpath d='M200 920 L260 800 L230 700 L300 620'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' viewBox='0 0 1440 900'%3E%3Cg fill='none' stroke='%23C8102E' stroke-width='1.5' opacity='0.55'%3E%3Cpath d='M-40 140 L90 175 L160 150 L260 230 L340 210 L430 290'/%3E%3Cpath d='M260 230 L300 340 L280 450 L330 540'/%3E%3Cpath d='M-40 620 L110 590 L190 640 L300 610'/%3E%3Cpath d='M120 920 L170 810 L140 710 L210 640'/%3E%3Cpath d='M1480 180 L1340 220 L1260 190 L1140 270 L1050 250'/%3E%3Cpath d='M1140 270 L1100 380 L1130 470'/%3E%3Cpath d='M1480 660 L1330 620 L1240 670 L1120 640'/%3E%3Cpath d='M1300 920 L1260 800 L1300 700'/%3E%3Cpath d='M700 -20 L740 80 L715 160'/%3E%3Cpath d='M760 920 L740 830'/%3E%3Cpath d='M560 420 L640 400 L720 450'/%3E%3C/g%3E%3C/svg%3E");
   background-size: cover;
   background-position: center;
-  filter: drop-shadow(0 0 7px var(--crack-glow));
+  filter: drop-shadow(0 0 5px var(--crack-glow));
   opacity: 0.45;
-  animation: crack-pulse 9s ease-in-out infinite;
+  animation: crack-breathe 8s ease-in-out infinite;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' viewBox='0 0 1440 900'%3E%3Cg fill='none' stroke='%23C8102E' stroke-width='4' opacity='0.16'%3E%3Cpath d='M-40 140 L90 175 L160 150 L260 230 L340 210 L430 290'/%3E%3Cpath d='M260 230 L300 340 L280 450 L330 540'/%3E%3Cpath d='M-40 620 L110 590 L190 640 L300 610'/%3E%3Cpath d='M1480 180 L1340 220 L1260 190 L1140 270 L1050 250'/%3E%3Cpath d='M1140 270 L1100 380 L1130 470'/%3E%3Cpath d='M1480 660 L1330 620 L1240 670 L1120 640'/%3E%3Cpath d='M1300 920 L1260 800 L1300 700'/%3E%3C/g%3E%3Cg fill='%23FF4D5E' opacity='0.8'%3E%3Ccircle cx='260' cy='230' r='3'/%3E%3Ccircle cx='430' cy='290' r='3'/%3E%3Ccircle cx='1140' cy='270' r='3'/%3E%3Ccircle cx='300' cy='610' r='3'/%3E%3Ccircle cx='190' cy='640' r='3'/%3E%3Ccircle cx='640' cy='400' r='2.5'/%3E%3Ccircle cx='740' cy='80' r='2.5'/%3E%3Ccircle cx='1260' cy='800' r='2.5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: center;
+  filter: blur(1.5px) drop-shadow(0 0 9px var(--crack-glow));
+  opacity: 0.5;
+  animation: ember-pulse 5.5s ease-in-out infinite;
 }
 html.light body::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' viewBox='0 0 1440 900'%3E%3Cg fill='none' stroke='%230B5FFF' stroke-width='1.2' opacity='0.35'%3E%3Cpath d='M-40 200 L120 240 L200 210 L320 300 L430 270 L560 360 L640 340 L760 420'/%3E%3Cpath d='M320 300 L360 420 L340 520 L380 610'/%3E%3Cpath d='M560 360 L700 400 L820 380 L950 460 L1020 440'/%3E%3Cpath d='M1480 600 L1300 560 L1220 610 L1080 540 L980 580'/%3E%3Cpath d='M700 -20 L740 90 L710 180 L780 260 L760 340'/%3E%3Cpath d='M200 920 L260 800 L230 700 L300 620'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' viewBox='0 0 1440 900'%3E%3Cg fill='none' stroke='%230B5FFF' stroke-width='1.1' opacity='0.32'%3E%3Cpath d='M-40 140 L90 175 L160 150 L260 230 L340 210 L430 290'/%3E%3Cpath d='M260 230 L300 340 L280 450 L330 540'/%3E%3Cpath d='M-40 620 L110 590 L190 640 L300 610'/%3E%3Cpath d='M120 920 L170 810 L140 710 L210 640'/%3E%3Cpath d='M1480 180 L1340 220 L1260 190 L1140 270 L1050 250'/%3E%3Cpath d='M1140 270 L1100 380 L1130 470'/%3E%3Cpath d='M1480 660 L1330 620 L1240 670 L1120 640'/%3E%3Cpath d='M1300 920 L1260 800 L1300 700'/%3E%3Cpath d='M700 -20 L740 80 L715 160'/%3E%3Cpath d='M760 920 L740 830'/%3E%3Cpath d='M560 420 L640 400 L720 450'/%3E%3C/g%3E%3C/svg%3E");
 }
-@keyframes crack-pulse {
+html.light body::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='900' viewBox='0 0 1440 900'%3E%3Cg fill='none' stroke='%230B5FFF' stroke-width='3' opacity='0.12'%3E%3Cpath d='M-40 140 L90 175 L160 150 L260 230 L340 210 L430 290'/%3E%3Cpath d='M260 230 L300 340 L280 450 L330 540'/%3E%3Cpath d='M-40 620 L110 590 L190 640 L300 610'/%3E%3Cpath d='M1480 180 L1340 220 L1260 190 L1140 270 L1050 250'/%3E%3Cpath d='M1140 270 L1100 380 L1130 470'/%3E%3Cpath d='M1480 660 L1330 620 L1240 670 L1120 640'/%3E%3Cpath d='M1300 920 L1260 800 L1300 700'/%3E%3C/g%3E%3Cg fill='%237AA5FF' opacity='0.5'%3E%3Ccircle cx='260' cy='230' r='2.5'/%3E%3Ccircle cx='430' cy='290' r='2.5'/%3E%3Ccircle cx='1140' cy='270' r='2.5'/%3E%3Ccircle cx='300' cy='610' r='2.5'/%3E%3Ccircle cx='190' cy='640' r='2.5'/%3E%3Ccircle cx='640' cy='400' r='2'/%3E%3Ccircle cx='740' cy='80' r='2'/%3E%3Ccircle cx='1260' cy='800' r='2'/%3E%3C/g%3E%3C/svg%3E");
+}
+@keyframes crack-breathe {
   0%,
   100% {
     opacity: 0.35;
   }
   50% {
-    opacity: 0.6;
+    opacity: 0.62;
+  }
+}
+@keyframes ember-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.75;
   }
 }
 main,
@@ -117,6 +190,9 @@ html {
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+  [data-reveal] {
+    transition-delay: 0ms !important;
   }
 }
 
@@ -146,6 +222,7 @@ html.light body {
   transition:
     opacity 0.6s ease,
     translate 0.6s ease;
+  transition-delay: var(--reveal-delay, 0ms);
 }
 .js [data-reveal].revealed {
   opacity: 1;

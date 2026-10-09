@@ -14,9 +14,10 @@ const { t } = Astro.props;
     {t.work.note}
   </p>
   <div class="mt-8 grid gap-5 md:grid-cols-3">
-    {t.projects.map((p: any) => (
+    {t.projects.map((p: any, i: number) => (
       <article
         data-reveal
+        style={`--reveal-delay:${Math.min(i, 5) * 90}ms`}
         class="surface surface-border card-hover flex flex-col rounded-xl border p-5 transition-transform hover:-translate-y-1"
       >
         <div class="aspect-video w-full overflow-hidden rounded-lg bg-gradient-to-br from-[#2a0d12] via-[#131316] to-[#0b1e33]">
