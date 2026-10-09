@@ -56,8 +56,12 @@ const { t } = Astro.props;
     {t.stack.title}
   </h2>
   <dl class="mt-6 grid gap-4 sm:grid-cols-2">
-    {t.stack.groups.map((g: any) => (
-      <div data-reveal class="surface surface-border rounded-xl border p-4">
+    {t.stack.groups.map((g: any, i: number) => (
+      <div
+        data-reveal
+        style={`--reveal-delay:${Math.min(i, 5) * 80}ms`}
+        class="surface surface-border rounded-xl border p-4"
+      >
         <dt class="mono text-xs uppercase tracking-wide opacity-60">{g.name}</dt>
         <dd class="mt-1 text-sm font-medium">{g.items}</dd>
       </div>
