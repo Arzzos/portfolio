@@ -23,6 +23,7 @@
       "name": "Plataforma Industrial Káiros",
       "oneline": "Sistema integral para manufactura que unifica WMS offline-first, mantenimiento, calidad y telemetría IIoT en tiempo real.",
       "role": "Arquitectura Full-Stack completa, diseño y desarrollo.",
+      "alt": "Selector de módulos de la plataforma Káiros: Gestión de Silos, Control de Calidad, WMS y Producción",
       "stack": [
         "Python",
         "FastAPI",
@@ -42,6 +43,7 @@
       "name": "Telemetría IIoT en silos",
       "oneline": "Radar vía PLC + WebSockets para medir sólidos finos en tiempo real, eliminando la medición manual en altura.",
       "role": "PM, arquitecto e implementador full-stack.",
+      "alt": "Tarjetas de telemetría de silos con niveles de llenado en tiempo real",
       "stack": ["Python", "WebSockets", "C++", "React", "TimescaleDB", "IoT"],
       "impact": ["Medición en tiempo real", "−90% errores de medición", "Cero subidas de riesgo por medición"]
     },
@@ -50,6 +52,7 @@
       "name": "Calidad y reportes por turno",
       "oneline": "Módulo de calidad con reportes automáticos por turno y semanal (CPK, Yield, Sigma) por correo e integrado al WMS.",
       "role": "Desarrollador Full-Stack.",
+      "alt": "Tablero de análisis estadístico de calidad con CPK, Sigma y alertas",
       "stack": ["Python", "React", "PostgreSQL"],
       "impact": ["−10 h/semana en reportes", "Indicadores automáticos por turno"]
     }
