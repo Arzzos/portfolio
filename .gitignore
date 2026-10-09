@@ -31,3 +31,6 @@ MEMORY.md
 
 # wrangler local state
 .wrangler/
+
+# stray browser-profile junk (never commit)
+C:*
