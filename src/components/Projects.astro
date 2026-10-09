@@ -22,10 +22,10 @@ const { t } = Astro.props;
       >
         <div class="aspect-video w-full overflow-hidden rounded-lg bg-gradient-to-br from-[#2a0d12] via-[#131316] to-[#0b1e33]">
           <img
-            src={`/placeholders/${p.id}.svg`}
-            alt=""
+            src={`/screenshots/${p.id}.webp`}
+            alt={p.alt}
             loading="lazy"
-            class="h-full w-full object-cover opacity-90"
+            class="h-full w-full object-cover object-top opacity-90"
           />
         </div>
         <p class="mono badge-conf mt-4 inline-block w-fit rounded px-2 py-1 text-[11px]">
