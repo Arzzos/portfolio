@@ -59,7 +59,7 @@
     "paragraphs": [
       "Self-taught developer who loves solving problems. It started young with videogames and small pages or scripts built out of curiosity.",
       "The real leap came in 2024 with the dual-education model: I proposed automations ranging from Kotlin inventory apps to Python backends and IoT sensor integrations. That work won 1st place nationally at the VET-Excellence Dual Award 2026 with Káiros.",
-      "Now studying ICT Engineering, looking for a remote team where I can contribute and keep growing."
+      "Now studying ICT Engineering, and a certified Industrial Productivity Technician (Conalep, dual model), where my process background was born. Looking for a remote team to contribute and keep growing."
     ]
   },
   "experience": {
@@ -95,9 +95,12 @@
     "message": "Message",
     "send": "Send",
     "whatsapp": "WhatsApp directly",
-    "note": "Turnstile anti-spam protected. Also: hola@arzzos.com",
+    "note": "You'll hear back from hola@arzzos.com.",
     "success": "Received. I'll reply soon.",
     "error": "Couldn't send. Reach me on WhatsApp or email."
   },
-  "footer": { "rights": "© 2026 Rasiel Espinal · arzzos.com", "made": "Astro + Workers · Cookie-free" }
+  "footer": {
+    "rights": "© 2026 Rasiel Espinal · arzzos.com",
+    "made": "Cuautitlán, Mexico · Available remotely"
+  }
 }

@@ -59,7 +59,7 @@
     "paragraphs": [
       "Desarrollador autodidacta apasionado por resolver problemas. El interés empezó de joven con videojuegos y páginas o scripts hechos por pura curiosidad.",
       "El salto real llegó en 2024 con el modelo de educación dual: propuse automatizaciones que van de apps de inventario en Kotlin a backends en Python e integraciones IoT. Ese enfoque ganó el 1.er lugar nacional del Premio de Excelencia Dual VET-Excellence 2026 (Medio Superior) con Káiros.",
-      "Hoy curso Ingeniería en TICs y busco un equipo remoto donde aportar base técnica y seguir creciendo."
+      "Hoy curso Ingeniería en TICs y soy PTB en Productividad Industrial (Conalep, modelo dual), donde nació mi base en procesos. Busco un equipo remoto donde aportar y seguir creciendo."
     ]
   },
   "experience": {
@@ -95,9 +95,12 @@
     "message": "Mensaje",
     "send": "Enviar",
     "whatsapp": "WhatsApp directo",
-    "note": "Protegido con Turnstile anti-spam. También: hola@arzzos.com",
+    "note": "Te respondo desde hola@arzzos.com.",
     "success": "Recibido. Te respondo pronto.",
     "error": "No se pudo enviar. Escríbeme por WhatsApp o email."
   },
-  "footer": { "rights": "© 2026 Rasiel Espinal · arzzos.com", "made": "Astro + Workers · Sin cookies" }
+  "footer": {
+    "rights": "© 2026 Rasiel Espinal · arzzos.com",
+    "made": "Cuautitlán, México · Disponible remoto"
+  }
 }
