@@ -25,7 +25,11 @@ export default function ThemeToggle({ lang }: { lang: 'es' | 'en' }) {
       type="button"
       onClick={toggle}
       aria-pressed={light}
-      aria-label={lang === 'es' ? 'Cambiar tema claro u oscuro' : 'Toggle light or dark theme'}
+      aria-label={
+        lang === 'es'
+          ? `Tema ${light ? 'light' : 'dark'}, cambiar a ${light ? 'oscuro' : 'claro'}`
+          : `Theme ${light ? 'light' : 'dark'}, switch to ${light ? 'dark' : 'light'}`
+      }
       className="mono rounded border border-current px-3 py-2 text-xs opacity-80 hover:opacity-100"
     >
       {light ? '☀ light' : '☾ dark'}
