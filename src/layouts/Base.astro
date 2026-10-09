@@ -33,6 +33,12 @@ const canonical = `https://arzzos.com${path}`;
       rel="stylesheet"
     />
     <title>{title}</title>
+    <!-- Turnstile: fail-closed bot check for the contact form. Widget renders explicitly (see Contact). -->
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=cfTsOnload"
+      async
+      defer
+    ></script>
     <script is:inline>
       try {
         const saved = localStorage.getItem('arzzos-theme');

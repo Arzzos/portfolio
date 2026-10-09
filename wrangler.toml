@@ -10,11 +10,13 @@ compatibility_date = "2026-10-01"
 
 [assets]
 directory = "./dist"
-not_found_handling = "single-page-app"
+not_found_handling = "single-page-application"
 
 [vars]
 SITE_URL = "https://arzzos.com"
 CONTACT_TO = "hola@arzzos.com"
 CONTACT_FROM = "hola@arzzos.com"
-# Public Turnstile site key (visible in HTML by design). Replace when created.
-TURNSTILE_SITE_KEY = "REEMPLAZAR-con-site-key"
+# Public Turnstile site key (visible in HTML by design).
+TURNSTILE_SITE_KEY = "0x4AAAAAAFSdRj1UQdP8paSq"
+# Frontend hostnames accepted by siteverify. Prod only: never localhost here.
+TURNSTILE_HOSTNAMES = "arzzos.com,www.arzzos.com"
