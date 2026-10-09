@@ -1,0 +1,121 @@
+---
+interface Props {
+  lang: 'es' | 'en';
+  t: any;
+}
+const { lang, t } = Astro.props;
+const c = t.contact;
+---
+
+<section id="contacto" aria-labelledby="contacto-title" class="mx-auto max-w-5xl scroll-mt-20 px-4 py-12">
+  <h2 id="contacto-title" class="text-2xl font-bold sm:text-3xl" data-reveal>
+    {c.title}
+  </h2>
+  <p class="mt-2 opacity-70" data-reveal>
+    {c.subtitle}
+  </p>
+  <div class="mt-6 grid gap-6 md:grid-cols-2">
+    <form
+      data-reveal
+      id="contact-form"
+      method="post"
+      action="/api/contact"
+      data-success={c.success}
+      data-error={c.error}
+      class="surface surface-border space-y-4 rounded-xl border p-5"
+    >
+      <div>
+        <label for="cf-name" class="mono text-xs uppercase tracking-wide opacity-70">
+          {c.name}
+        </label>
+        <input
+          id="cf-name"
+          name="name"
+          type="text"
+          required
+          autocomplete="name"
+          maxlength="100"
+          class="input-border mt-1 w-full rounded border bg-transparent px-3 py-2"
+        />
+      </div>
+      <div>
+        <label for="cf-email" class="mono text-xs uppercase tracking-wide opacity-70">
+          {c.email}
+        </label>
+        <input
+          id="cf-email"
+          name="email"
+          type="email"
+          required
+          autocomplete="email"
+          maxlength="254"
+          class="input-border mt-1 w-full rounded border bg-transparent px-3 py-2"
+        />
+      </div>
+      <div>
+        <label for="cf-message" class="mono text-xs uppercase tracking-wide opacity-70">
+          {c.message}
+        </label>
+        <textarea
+          id="cf-message"
+          name="message"
+          required
+          rows="5"
+          maxlength="5000"
+          class="input-border mt-1 w-full rounded border bg-transparent px-3 py-2"
+        ></textarea>
+      </div>
+      <p id="cf-status" role="status" aria-live="polite" class="mono hidden text-sm"></p>
+      <button
+        type="submit"
+        class="btn-primary inline-flex w-full items-center justify-center rounded px-6 font-semibold hover:brightness-110"
+      >
+        {c.send}
+      </button>
+      <p class="mono text-[11px] opacity-50">{c.note}</p>
+    </form>
+    <div data-reveal class="flex flex-col justify-center gap-4">
+      <a
+        href="https://wa.me/525521053389?text=Hola%20Rasiel%2C%20vi%20tu%20portfolio%20en%20arzzos.com"
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center justify-center rounded border border-current px-6 hover:opacity-80"
+      >
+        {c.whatsapp}
+      </a>
+      <a href="mailto:hola@arzzos.com" class="mono text-sm underline opacity-80 hover:opacity-100">
+        hola@arzzos.com
+      </a>
+      <a
+        href="https://github.com/Arzzos"
+        target="_blank"
+        rel="noopener"
+        class="mono text-sm underline opacity-80 hover:opacity-100"
+      >
+        github.com/Arzzos
+      </a>
+    </div>
+  </div>
+</section>
+
+<script is:inline data-cf-lang={lang}>
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('cf-status');
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form).entries());
+    status.classList.remove('hidden');
+    status.textContent = '…';
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      status.textContent = res.ok ? (form.dataset.success ?? 'OK') : (form.dataset.error ?? 'Error');
+      if (res.ok) form.reset();
+    } catch {
+      status.textContent = form.dataset.error ?? 'Error';
+    }
+  });
+</script>

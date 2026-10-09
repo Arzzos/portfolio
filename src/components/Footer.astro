@@ -1,0 +1,16 @@
+---
+interface Props {
+  t: any;
+}
+const { t } = Astro.props;
+---
+
+<footer class="surface-border border-t">
+  <div class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-3 px-4 py-8 sm:flex-row">
+    <p class="mono text-xs opacity-60">{t.footer.rights}</p>
+    <p class="mono text-xs opacity-60">{t.footer.made}</p>
+    <a href="#contenido" class="mono text-xs underline opacity-70 hover:opacity-100">
+      ↑ {t.nav.contact === 'Contacto' ? 'Volver arriba' : 'Back to top'}
+    </a>
+  </div>
+</footer>

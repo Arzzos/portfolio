@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  lang: 'es' | 'en';
+  title: string;
+  description: string;
+  path: string;
+}
+
+const { lang, title, description, path } = Astro.props;
+const canonical = `https://arzzos.com${path}`;
+---
+
+<!doctype html>
+<html lang={lang} class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://arzzos.com/arzzos-logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem('arzzos-theme');
+        const theme = saved ?? 'dark';
+        document.documentElement.classList.toggle('light', theme === 'light');
+        document.documentElement.classList.toggle('dark', theme !== 'light');
+        document.documentElement.classList.add('js');
+      } catch {
+        document.documentElement.classList.add('js');
+      }
+    </script>
+  </head>
+  <body class="min-h-screen">
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:absolute focus:start-4 focus:top-4 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-2 focus:text-black"
+    >
+      {lang === 'es' ? 'Saltar al contenido' : 'Skip to content'}
+    </a>
+    <slot name="nav" />
+    <main id="contenido">
+      <slot />
+    </main>
+    <slot name="footer" />
+    <script is:inline>
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) if (e.isIntersecting) e.target.classList.add('revealed');
+        },
+        { threshold: 0.12 },
+      );
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Hero from '../../components/Hero.astro';
+import Projects from '../../components/Projects.astro';
+import About from '../../components/About.astro';
+import Contact from '../../components/Contact.astro';
+import Footer from '../../components/Footer.astro';
+import en from '../../i18n/en.json';
+
+const title = 'Rasiel Espinal — Full Stack Developer | arzzos.com';
+const description =
+  'Portfolio of Rasiel Espinal (Arzzos): full-stack architecture, Python, Rust, React and IoT. Mission-critical systems and industrial automation.';
+---
+
+<Base lang="en" title={title} description={description} path="/en/">
+  <Nav slot="nav" lang="en" t={en} otherLangPath="/es/" />
+  <Hero t={en} />
+  <Projects t={en} />
+  <About t={en} />
+  <Contact lang="en" t={en} />
+  <Footer slot="footer" t={en} />
+</Base>

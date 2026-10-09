@@ -1,0 +1,55 @@
+---
+interface Props {
+  t: any;
+}
+
+const { t } = Astro.props;
+---
+
+<section id="trabajo" aria-labelledby="trabajo-title" class="mx-auto max-w-5xl scroll-mt-20 px-4 py-12">
+  <h2 id="trabajo-title" class="text-2xl font-bold sm:text-3xl" data-reveal>
+    {t.work.title}
+  </h2>
+  <p class="mt-2 max-w-2xl opacity-70" data-reveal>
+    {t.work.note}
+  </p>
+  <div class="mt-8 grid gap-5 md:grid-cols-3">
+    {t.projects.map((p: any) => (
+      <article
+        data-reveal
+        class="surface surface-border card-hover flex flex-col rounded-xl border p-5 transition-transform hover:-translate-y-1"
+      >
+        <div class="aspect-video w-full overflow-hidden rounded-lg bg-gradient-to-br from-[#2a0d12] via-[#131316] to-[#0b1e33]">
+          <img
+            src={`/placeholders/${p.id}.svg`}
+            alt=""
+            loading="lazy"
+            class="h-full w-full object-cover opacity-90"
+          />
+        </div>
+        <p class="mono badge-conf mt-4 inline-block w-fit rounded px-2 py-1 text-[11px]">
+          {t.work.confidential}
+        </p>
+        <h3 class="mt-2 text-lg font-bold">{p.name}</h3>
+        <p class="mt-1 text-sm opacity-80">{p.oneline}</p>
+        <p class="mono mt-3 text-xs opacity-60">{p.role}</p>
+        <ul class="mono mt-3 flex flex-wrap gap-1.5 text-[11px]" aria-label="Stack">
+          {p.stack.map((s: string) => (
+            <li class="input-border rounded border px-2 py-0.5">{s}</li>
+          ))}
+        </ul>
+        <ul class="impact mt-3 space-y-1 text-sm font-semibold">
+          {p.impact.map((m: string) => (
+            <li>✓ {m}</li>
+          ))}
+        </ul>
+      </article>
+    ))}
+  </div>
+  <p class="mono mt-6 text-xs opacity-60" data-reveal>
+    → {t.work.cta}:{' '}
+    <a class="underline" href="#contacto">
+      {t.nav.contact}
+    </a>
+  </p>
+</section>

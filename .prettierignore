@@ -1,0 +1,9 @@
+dist/
+.astro/
+node_modules/
+.agents/
+pnpm-lock.yaml
+*.toml
+public/*.png
+public/*.jpeg
+public/placeholders/

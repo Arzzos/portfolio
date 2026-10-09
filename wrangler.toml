@@ -1,0 +1,20 @@
+# R2 object-store bucket for heavy assets (screenshots, video, CV pdf).
+# Bound in a later step with: wrangler r2 bucket create arzzos-portfolio-assets
+# [[r2_buckets]]
+# binding = "ASSETS"
+# bucket_name = "arzzos-portfolio-assets"
+
+name = "arzzos-portfolio"
+main = "./worker.js"
+compatibility_date = "2026-10-01"
+
+[assets]
+directory = "./dist"
+not_found_handling = "single-page-app"
+
+[vars]
+SITE_URL = "https://arzzos.com"
+CONTACT_TO = "hola@arzzos.com"
+CONTACT_FROM = "hola@arzzos.com"
+# Public Turnstile site key (visible in HTML by design). Replace when created.
+TURNSTILE_SITE_KEY = "REEMPLAZAR-con-site-key"

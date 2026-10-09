@@ -1,0 +1,40 @@
+---
+import ThemeToggle from './ui/ThemeToggle';
+
+interface Props {
+  lang: 'es' | 'en';
+  t: any;
+  otherLangPath: string;
+}
+
+const { lang, t, otherLangPath } = Astro.props;
+const prefix = `/${lang}`;
+---
+
+<header class="site-header sticky top-0 z-40 backdrop-blur">
+  <nav aria-label="Principal" class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
+    <a href={prefix + '/'} class="flex items-center gap-2 font-bold">
+      <img src="/arzzos-logo.png" alt="Arzzos" width="28" height="28" class="rounded" />
+      <span class="mono text-sm">arzzos.com</span>
+    </a>
+    <div class="flex items-center gap-4 text-sm">
+      <a class="hidden opacity-80 hover:opacity-100 sm:inline" href="#trabajo">
+        {t.nav.work}
+      </a>
+      <a class="hidden opacity-80 hover:opacity-100 sm:inline" href="#sobre-mi">
+        {t.nav.about}
+      </a>
+      <a class="hidden opacity-80 hover:opacity-100 sm:inline" href="#contacto">
+        {t.nav.contact}
+      </a>
+      <a
+        class="mono text-xs opacity-70 hover:opacity-100"
+        href={otherLangPath}
+        hreflang={lang === 'es' ? 'en' : 'es'}
+      >
+        {lang === 'es' ? 'EN' : 'ES'}
+      </a>
+      <ThemeToggle lang={lang} client:load />
+    </div>
+  </nav>
+</header>
